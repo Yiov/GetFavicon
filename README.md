@@ -2,6 +2,8 @@
 
 在线获取任意网站 favicon 的代理服务，国内可直接访问，无需代理/VPN。替代 Google Favicon 服务的最佳选择。
 
+![](./screenshot.png)
+
 ## ✨ 特性
 
 -   **多源回退** — 网站 HTML 解析 → `/favicon.ico` → Clearbit → DuckDuckGo → 默认图标
