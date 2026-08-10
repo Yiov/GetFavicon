@@ -1,0 +1,15 @@
+{
+  "name": "favicon-service",
+  "version": "1.0.0",
+  "description": "在线获取网站 favicon 的代理服务，国内可直接访问，无需魔法上网",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "1.0.0-rc.12",
+    "express": "^4.21.0"
+  }
+}

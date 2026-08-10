@@ -1,0 +1,760 @@
+/* ============================================
+   LightRays Canvas — 动态光束背景
+   ============================================ */
+#lightRaysCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Theme Variables — 深色主题
+   ============================================ */
+:root {
+  --bg: #000000;
+  --text: #ffffff;
+  --text-muted: #888888;
+  --text-dim: #555555;
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-focus-bg: rgba(255, 255, 255, 0.07);
+  --input-focus-border: rgba(255, 255, 255, 0.35);
+  --btn-bg: #ffffff;
+  --btn-text: #000000;
+  --btn-hover-bg: rgba(255, 255, 255, 0.9);
+  --btn-border: rgba(255, 255, 255, 0.2);
+  --outline-btn-border: rgba(255, 255, 255, 0.15);
+  --outline-btn-text: #ffffff;
+  --outline-btn-hover-bg: #ffffff;
+  --outline-btn-hover-text: #000000;
+  --code-bg: rgba(255, 255, 255, 0.04);
+  --code-text: #7fdbca;
+  --quick-text: #555555;
+  --quick-link-color: #888888;
+  --quick-link-border: rgba(255, 255, 255, 0.1);
+  --quick-link-hover-bg: rgba(255, 255, 255, 0.05);
+  --quick-link-hover-border: rgba(255, 255, 255, 0.2);
+  --quick-link-hover-color: #ffffff;
+  --divider: rgba(255, 255, 255, 0.08);
+  --icon-bg: rgba(255, 255, 255, 0.05);
+  --table-border: rgba(255, 255, 255, 0.08);
+  --toast-bg: rgba(20, 20, 20, 0.95);
+  --toast-border: rgba(255, 255, 255, 0.1);
+  --toast-text: rgba(255, 255, 255, 0.85);
+  --size-btn-color: #888888;
+  --size-btn-border: rgba(255, 255, 255, 0.1);
+  --size-btn-hover-color: #ffffff;
+  --size-btn-hover-border: rgba(255, 255, 255, 0.2);
+  --size-btn-active-bg: #ffffff;
+  --size-btn-active-text: #000000;
+  --copy-link-color: #888888;
+  --copy-link-hover-color: #ffffff;
+  --placeholder-color: #555555;
+  --loader-border: rgba(255, 255, 255, 0.1);
+  --loader-accent: #ffffff;
+  --arrow-color: #ffffff;
+  --success: #00b894;
+}
+
+/* ============================================
+   全局重置
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   容器
+   ============================================ */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px 120px;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+header {
+  text-align: center;
+  padding: 80px 20px 56px;
+}
+
+header h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  font-weight: 400;
+}
+
+/* ============================================
+   GitHub Link
+   ============================================ */
+.github-link {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.github-link:hover {
+  border-color: var(--quick-link-hover-border);
+  background: var(--quick-link-hover-bg);
+}
+
+.github-link svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text-muted);
+  transition: fill 0.25s ease;
+}
+
+.github-link:hover svg {
+  fill: var(--text);
+}
+
+/* ============================================
+   Input Section
+   ============================================ */
+.input-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#domainInput {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#domainInput:focus {
+  border-color: var(--input-focus-border);
+  background: var(--input-focus-bg);
+}
+
+#domainInput::placeholder {
+  color: var(--placeholder-color);
+}
+
+#fetchBtn {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  padding: 14px 28px;
+  border: 1px solid var(--btn-border);
+  border-radius: 10px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+#fetchBtn:hover {
+  background: var(--btn-hover-bg);
+  transform: translateY(-1px);
+}
+
+#fetchBtn:active {
+  transform: scale(0.98);
+}
+
+.quick-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  color: var(--quick-text);
+}
+
+.quick-links a {
+  color: var(--quick-link-color);
+  text-decoration: none;
+  padding: 4px 12px;
+  border: 1px solid var(--quick-link-border);
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.quick-links a:hover {
+  background: var(--quick-link-hover-bg);
+  border-color: var(--quick-link-hover-border);
+  color: var(--quick-link-hover-color);
+}
+
+/* ============================================
+   Result Section
+   ============================================ */
+.result-section {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.result-card {
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.result-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.favicon-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+#faviconImg {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--icon-bg);
+  padding: 8px;
+}
+
+.favicon-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.domain-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.source-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Result actions */
+.result-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.download-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--outline-btn-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--outline-btn-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.download-btn:hover {
+  background: var(--outline-btn-hover-bg);
+  color: var(--outline-btn-hover-text);
+  border-color: var(--outline-btn-hover-bg);
+}
+
+.copy-link-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--size-btn-border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--copy-link-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-link-btn:hover {
+  border-color: var(--size-btn-hover-border);
+  color: var(--copy-link-hover-color);
+}
+
+/* Size selector */
+.size-selector {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.size-label {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.size-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.size-btn {
+  min-width: 52px;
+  text-align: center;
+  padding: 8px 14px;
+  border: 1px solid var(--size-btn-border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--size-btn-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-btn:hover {
+  border-color: var(--size-btn-hover-border);
+  color: var(--size-btn-hover-color);
+}
+
+.size-btn.active {
+  background: var(--size-btn-active-bg);
+  border-color: var(--size-btn-active-bg);
+  color: var(--size-btn-active-text);
+}
+
+/* ============================================
+   Loading
+   ============================================ */
+.loading-section {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+.loader {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--loader-border);
+  border-top-color: var(--loader-accent);
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   API Section
+   ============================================ */
+.api-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.api-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.api-section > p {
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.code-block {
+  position: relative;
+  background: var(--code-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 0.875rem;
+  color: var(--code-text);
+  white-space: pre;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--size-btn-border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  border-color: var(--size-btn-hover-border);
+  color: var(--text);
+}
+
+.api-table {
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.api-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.api-table th,
+.api-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--table-border);
+  font-size: 0.9rem;
+}
+
+.api-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.api-table code {
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 0.85rem;
+  color: var(--code-text);
+}
+
+.features {
+  margin-top: 24px;
+}
+
+.features h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.features ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.features li {
+  padding: 6px 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding-left: 20px;
+  position: relative;
+}
+
+.features li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--arrow-color);
+}
+
+/* ============================================
+   Toast Notification
+   ============================================ */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: var(--toast-bg);
+  border: 1px solid var(--toast-border);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(128, 128, 128, 0.03) inset;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  pointer-events: auto;
+  animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: 480px;
+}
+
+.toast.toast-out {
+  animation: toastOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.toast-icon.warning svg {
+  color: #f0c060;
+}
+
+.toast-icon.error svg {
+  color: #f06060;
+}
+
+.toast-icon.info svg {
+  color: #60a5fa;
+}
+
+.toast-message {
+  color: var(--toast-text);
+  font-size: 0.9rem;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+}
+
+/* ============================================
+   Confetti
+   ============================================ */
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.confetti {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(
+      calc(var(--tx) * 0.3),
+      calc(var(--ty) * 0.3)
+    ) rotate(calc(var(--rotation) * 0.3)) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty))
+      rotate(var(--rotation)) scale(0.4);
+  }
+}
+
+/* ============================================
+   Result Glow — 获取图标背景处炫光
+   ============================================ */
+.result-glow {
+  position: absolute;
+  inset: -30px -20px;
+  border-radius: 40px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 40%, rgba(6, 182, 212, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 60%, rgba(236, 72, 153, 0.06) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.result-section.active .result-glow {
+  opacity: 1;
+}
+
+/* ============================================
+   Fetch Button Glow — 彩虹辉光
+   ============================================ */
+#fetchBtn::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899, #3b82f6, #06b6d4);
+  background-size: 300% 100%;
+  z-index: -1;
+  filter: blur(12px);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  animation: glowShift 3s linear infinite;
+}
+
+#fetchBtn:hover::before {
+  opacity: 0.85;
+}
+
+@keyframes glowShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 16px 80px;
+  }
+
+  header {
+    padding: 48px 16px 36px;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-section {
+    padding: 24px;
+  }
+
+  .result-card {
+    flex-direction: column;
+  }
+
+  .favicon-preview {
+    flex-direction: column;
+  }
+
+  .result-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .size-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .api-section {
+    padding: 24px;
+  }
+
+  .github-link {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
+}
